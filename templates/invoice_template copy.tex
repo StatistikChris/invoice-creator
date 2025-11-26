@@ -1,0 +1,98 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{eurosym}
+\usepackage{array}
+\usepackage{longtable}
+
+\begin{document}
+
+\pagestyle{empty}
+
+% Header
+\begin{center}
+    {\LARGE \textbf{INVOICE}}
+\end{center}
+
+\vspace{0.5cm}
+
+% Invoice details
+\begin{tabular}{@{}l@{\hspace{3cm}}l@{}}
+    \textbf{Invoice Number:} & {{ invoice_number }} \\
+    \textbf{Date:} & {{ date }} \\
+    {% if due_date %}\textbf{Due Date:} & {{ due_date }} \\{% endif %}
+\end{tabular}
+
+\vspace{1cm}
+
+% Sender and Recipient information
+\begin{minipage}[t]{0.45\textwidth}
+    \textbf{From:}\\
+    {% if sender_name %}{{ sender_name }}\\{% endif %}
+    {% if sender_address %}{{ sender_address }}\\{% endif %}
+    {% if sender_city %}{{ sender_city }}\\{% endif %}
+    {% if sender_email %}Email: {{ sender_email }}\\{% endif %}
+    {% if sender_phone %}Phone: {{ sender_phone }}\\{% endif %}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+    \textbf{To:}\\
+    {% if recipient_name %}{{ recipient_name }}\\{% endif %}
+    {% if recipient_address %}{{ recipient_address }}\\{% endif %}
+    {% if recipient_city %}{{ recipient_city }}\\{% endif %}
+    {% if recipient_email %}Email: {{ recipient_email }}\\{% endif %}
+\end{minipage}
+
+\vspace{1.5cm}
+
+% Items table
+\begin{longtable}{@{}p{6cm}p{2cm}p{2cm}p{2.5cm}@{}}
+    \toprule
+    \textbf{Description} & \textbf{Quantity} & \textbf{Unit Price} & \textbf{Amount} \\
+    \midrule
+    \endfirsthead
+    
+    \toprule
+    \textbf{Description} & \textbf{Quantity} & \textbf{Unit Price} & \textbf{Amount} \\
+    \midrule
+    \endhead
+    
+    {% for item in items %}
+    {{ item.description }} & {{ item.quantity }} & {{ item.unit_price }} & {{ item.amount }} \\
+    {% endfor %}
+    \midrule
+    & & \textbf{Subtotal:} & {% if subtotal %}{{ subtotal }}{% else %}{{ total }}{% endif %} \\
+    {% if tax %}
+    & & \textbf{Tax ({{ tax_rate }}\%):} & {{ tax }} \\
+    {% endif %}
+    {% if discount %}
+    & & \textbf{Discount:} & -{{ discount }} \\
+    {% endif %}
+    \midrule
+    & & \textbf{Total:} & \textbf{{"{{ total }}"}} \\
+    \bottomrule
+\end{longtable}
+
+\vspace{1cm}
+
+{% if notes %}
+\textbf{Notes:}\\
+{{ notes }}
+{% endif %}
+
+{% if payment_terms %}
+\vspace{0.5cm}
+\textbf{Payment Terms:}\\
+{{ payment_terms }}
+{% endif %}
+
+\vfill
+
+\begin{center}
+    \small
+    Thank you for your business!
+\end{center}
+
+\end{document}

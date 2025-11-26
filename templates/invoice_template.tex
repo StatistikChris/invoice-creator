@@ -1,98 +1,76 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
-\usepackage{booktabs}
-\usepackage{graphicx}
+\documentclass[backaddress=true]{scrlttr2}
+\usepackage[utf8x]{inputenc}
+\usepackage{color,calc,mathptmx}
 \usepackage{eurosym}
-\usepackage{array}
-\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[ngerman]{babel} 
 
+\renewcommand{\familydefault}{\sfdefault}
+
+
+\setkomavar{fromname}{Dipl.-Math. \\ Christian}
+\setkomavar{fromaddress}{Kennich 22\\ Hamburg}
+\setkomavar{subject}{Rechnung}
+\setkomavar{place}{Hamburgo}
+%\setkomavar{date}{31. Oktober 2014}
+
+
+\firsthead{\null\hfill
+  \parbox[t][\headheight][t]{5cm}{%
+   \raggedright
+   \color[gray]{.5}%
+   \usekomavar{fromname}\\
+   Sonninstraße 22\\
+   20097 Hamburg\\[\baselineskip]
+ %  \usekomavar*{fromphone}\\[\baselineskip]
+   Steuernummer: 11/15111/11111\\[\baselineskip]
+   }
+}
+
+
+\setkomavar{location}{
+%\\[\baselineskip]
+%\\[\baselineskip]
+  \large{Rechnung  Nr. 1/2125
+}}
 \begin{document}
+\date{18. Juli 2025}
+\setlength{\parindent}{0pt}
 
-\pagestyle{empty}
 
-% Header
-\begin{center}
-    {\LARGE \textbf{INVOICE}}
-\end{center}
+\begin{letter}{
+Mustermann Mann \\
+Muster Str. 3c\\
+12345 Musterstadt
+}
 
-\vspace{0.5cm}
+\opening{}
+%\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|c|c|p{0.48\textwidth}|r|r|}
+ \hline
+  \textbf{Pos} & \textbf{Menge} & \textbf{Bezeichnung} & \textbf{Einzelpreis} & \textbf{Gesamtpreis} \\
+ \hline
+ 1 & 1 Std &  Nachhilfe Statistik  \newline  &   \EUR{50,42} & \EUR{50,42} \\
+ \hline
 
-% Invoice details
-\begin{tabular}{@{}l@{\hspace{3cm}}l@{}}
-    \textbf{Invoice Number:} & {{ invoice_number }} \\
-    \textbf{Date:} & {{ date }} \\
-    {% if due_date %}\textbf{Due Date:} & {{ due_date }} \\{% endif %}
+ %\\ \hline
+ \multicolumn{4}{r}{\textbf{Zwischensumme}} & \multicolumn{1}{r}{\EUR{50,42}}\\
+ \hline
+ \multicolumn{4}{r}{\textbf{Gesamtbetrag (brutto) zuzüglich 19 Prozent Mehrwertsteuer}} & \multicolumn{1}{r}{\EUR{60}}\\
+
 \end{tabular}
+\\[\baselineskip]
+%\textbf{Im ausgewiesenen Betrag ist gemäß § 19 UStG keine Umsatzsteuer enthalten.} %\\[\baselineskip]
+%\textbf{Zahlbar bis 15.05.2012.}
 
-\vspace{1cm}
-
-% Sender and Recipient information
-\begin{minipage}[t]{0.45\textwidth}
-    \textbf{From:}\\
-    {% if sender_name %}{{ sender_name }}\\{% endif %}
-    {% if sender_address %}{{ sender_address }}\\{% endif %}
-    {% if sender_city %}{{ sender_city }}\\{% endif %}
-    {% if sender_email %}Email: {{ sender_email }}\\{% endif %}
-    {% if sender_phone %}Phone: {{ sender_phone }}\\{% endif %}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-    \textbf{To:}\\
-    {% if recipient_name %}{{ recipient_name }}\\{% endif %}
-    {% if recipient_address %}{{ recipient_address }}\\{% endif %}
-    {% if recipient_city %}{{ recipient_city }}\\{% endif %}
-    {% if recipient_email %}Email: {{ recipient_email }}\\{% endif %}
-\end{minipage}
-
-\vspace{1.5cm}
-
-% Items table
-\begin{longtable}{@{}p{6cm}p{2cm}p{2cm}p{2.5cm}@{}}
-    \toprule
-    \textbf{Description} & \textbf{Quantity} & \textbf{Unit Price} & \textbf{Amount} \\
-    \midrule
-    \endfirsthead
-    
-    \toprule
-    \textbf{Description} & \textbf{Quantity} & \textbf{Unit Price} & \textbf{Amount} \\
-    \midrule
-    \endhead
-    
-    {% for item in items %}
-    {{ item.description }} & {{ item.quantity }} & {{ item.unit_price }} & {{ item.amount }} \\
-    {% endfor %}
-    \midrule
-    & & \textbf{Subtotal:} & {% if subtotal %}{{ subtotal }}{% else %}{{ total }}{% endif %} \\
-    {% if tax %}
-    & & \textbf{Tax ({{ tax_rate }}\%):} & {{ tax }} \\
-    {% endif %}
-    {% if discount %}
-    & & \textbf{Discount:} & -{{ discount }} \\
-    {% endif %}
-    \midrule
-    & & \textbf{Total:} & \textbf{{"{{ total }}"}} \\
-    \bottomrule
-\end{longtable}
-
-\vspace{1cm}
-
-{% if notes %}
-\textbf{Notes:}\\
-{{ notes }}
-{% endif %}
-
-{% if payment_terms %}
-\vspace{0.5cm}
-\textbf{Payment Terms:}\\
-{{ payment_terms }}
-{% endif %}
-
-\vfill
-
-\begin{center}
-    \small
-    Thank you for your business!
-\end{center}
-
+%\vspace{35pt}
+%\textbf{Zahlung abzüglich 3 Prozent Skonto bei Zahlung innerhalb von 14 Tagen }
+%\\[\baselineskip]
+%\\ 
+\"Uberweisung auf IBAN DE12 1234 1234 1234 1234 12
+%\\ Es wurde eine Anzahlung von \EUR{100} vereinbart.
+%\closing{}
+\vspace{35pt}
+\\ \textbf{Dipl.-Math. Christian Heinrich Marek}
+\end{letter}
 \end{document}
