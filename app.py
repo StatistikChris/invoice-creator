@@ -101,6 +101,24 @@ def health():
     """Health check endpoint for Cloud Run."""
     return jsonify({'status': 'healthy'}), 200
 
+@app.route('/', methods=['GET'])
+def index():
+    """Root endpoint with API documentation."""
+    return jsonify({
+        'service': 'Invoice PDF Generator',
+        'version': '1.0',
+        'endpoints': {
+            '/health': 'Health check endpoint',
+            '/generate-invoice': 'Generate invoice PDF (requires data parameter)'
+        },
+        'usage': {
+            'method': 'GET',
+            'parameter': 'data (JSON string)',
+            'example': '/generate-invoice?data={"invoice_number":"INV-001","date":"2025-11-26","items":[...],"total":"$100"}'
+        },
+        'output': 'PDF uploaded to gs://keine_panik_bucket/output.pdf'
+    }), 200
+
 @app.route('/generate-invoice', methods=['GET'])
 def generate_invoice():
     """
