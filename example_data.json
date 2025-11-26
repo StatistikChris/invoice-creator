@@ -1,0 +1,41 @@
+{
+  "invoice_number": "INV-2025-001",
+  "date": "2025-11-26",
+  "due_date": "2025-12-26",
+  "sender_name": "Your Company Name",
+  "sender_address": "123 Main Street",
+  "sender_city": "New York, NY 10001",
+  "sender_email": "billing@yourcompany.com",
+  "sender_phone": "+1 (555) 123-4567",
+  "recipient_name": "Client Company Inc.",
+  "recipient_address": "456 Client Avenue",
+  "recipient_city": "Boston, MA 02101",
+  "recipient_email": "accounts@client.com",
+  "items": [
+    {
+      "description": "Web Development Services - Frontend",
+      "quantity": "40",
+      "unit_price": "$150.00",
+      "amount": "$6,000.00"
+    },
+    {
+      "description": "Web Development Services - Backend",
+      "quantity": "30",
+      "unit_price": "$150.00",
+      "amount": "$4,500.00"
+    },
+    {
+      "description": "Consulting Services",
+      "quantity": "10",
+      "unit_price": "$200.00",
+      "amount": "$2,000.00"
+    }
+  ],
+  "subtotal": "$12,500.00",
+  "tax_rate": "8.5",
+  "tax": "$1,062.50",
+  "discount": "$0.00",
+  "total": "$13,562.50",
+  "notes": "Thank you for your business. Payment is due within 30 days.",
+  "payment_terms": "Bank transfer to Account: 123456789, Routing: 987654321. Checks payable to Your Company Name."
+}
