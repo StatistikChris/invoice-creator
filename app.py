@@ -65,11 +65,46 @@ def populate_template(template_path, data):
     Returns:
         Rendered LaTeX content
     """
+    # Escape LaTeX special characters in string values
+    def escape_latex(text):
+        if not isinstance(text, str):
+            return text
+        # Escape special LaTeX characters
+        replacements = {
+            '&': r'\&',
+            '%': r'\%',
+            '$': r'\$',
+            '#': r'\#',
+            '_': r'\_',
+            '{': r'\{',
+            '}': r'\}',
+            '~': r'\textasciitilde{}',
+            '^': r'\^{}',
+            '\\': r'\textbackslash{}',
+        }
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+        return text
+    
+    def escape_dict(d):
+        """Recursively escape LaTeX characters in dictionary values."""
+        if isinstance(d, dict):
+            return {k: escape_dict(v) for k, v in d.items()}
+        elif isinstance(d, list):
+            return [escape_dict(item) for item in d]
+        elif isinstance(d, str):
+            return escape_latex(d)
+        else:
+            return d
+    
+    # Escape all data
+    escaped_data = escape_dict(data)
+    
     with open(template_path, 'r', encoding='utf-8') as f:
         template_content = f.read()
     
     template = Template(template_content)
-    return template.render(**data)
+    return template.render(**escaped_data)
 
 def upload_to_gcs(local_file_path, bucket_name, destination_blob_name):
     """
@@ -116,7 +151,7 @@ def index():
             'parameter': 'data (JSON string)',
             'example': '/generate-invoice?data={"invoice_number":"INV-001","date":"2025-11-26","items":[...],"total":"$100"}'
         },
-        'output': 'PDF uploaded to gs://keine_panik_bucket/output.pdf'
+        'output': 'PDF uploaded to gs://keine_panik_bucket/invoice.pdf'
     }), 200
 
 @app.route('/generate-invoice', methods=['GET'])
