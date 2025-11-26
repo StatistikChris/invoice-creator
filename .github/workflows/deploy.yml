@@ -48,9 +48,9 @@ jobs:
           --platform managed \
           --region $REGION \
           --allow-unauthenticated \
-          --memory 1Gi \
-          --cpu 1 \
-          --timeout 60 \
+          --memory 2Gi \
+          --cpu 2 \
+          --timeout 120 \
           --max-instances 10 \
           --service-account github-actions@$PROJECT_ID.iam.gserviceaccount.com
 
