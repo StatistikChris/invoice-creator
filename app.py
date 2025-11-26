@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 # Google Cloud Storage configuration
 GCS_BUCKET_NAME = 'keine_panik_bucket'
-GCS_OUTPUT_PATH = 'output.pdf'
+GCS_OUTPUT_PATH = 'invoice.pdf'
 
 def render_latex_to_pdf(tex_content, output_dir):
     """
