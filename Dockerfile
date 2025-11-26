@@ -1,4 +1,4 @@
-# Use official Python runtime as base image yeah
+# Use official Python runtime as base image
 FROM python:3.11-slim
 
 # Install system dependencies including LaTeX
