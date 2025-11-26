@@ -149,17 +149,25 @@ def generate_invoice():
             try:
                 gcs_url = upload_to_gcs(pdf_path, GCS_BUCKET_NAME, GCS_OUTPUT_PATH)
                 logger.info(f"PDF uploaded to: {gcs_url}")
+                
+                # Return success summary
+                return jsonify({
+                    'success': True,
+                    'message': 'Invoice generated successfully',
+                    'invoice_number': invoice_data.get('invoice_number'),
+                    'date': invoice_data.get('date'),
+                    'total': invoice_data.get('total'),
+                    'gcs_url': gcs_url,
+                    'items_count': len(invoice_data.get('items', []))
+                }), 200
+                
             except Exception as e:
                 logger.error(f"Failed to upload to GCS: {str(e)}")
-                # Continue to return the file even if upload fails
-            
-            # Send PDF file
-            return send_file(
-                pdf_path,
-                mimetype='application/pdf',
-                as_attachment=True,
-                download_name=f"invoice_{invoice_data.get('invoice_number', 'unknown')}.pdf"
-            )
+                return jsonify({
+                    'success': False,
+                    'error': 'Failed to upload PDF to storage',
+                    'details': str(e)
+                }), 500
     
     except Exception as e:
         logger.error(f"Error generating invoice: {str(e)}")

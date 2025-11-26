@@ -22,8 +22,30 @@ A Google Cloud Run service that generates professional invoice PDF files from La
 - `data` (required): URL-encoded JSON string containing invoice data
 
 **Response:** 
-- Returns the generated PDF file for download
-- Automatically uploads the PDF to `gs://keine_panik_bucket/output.pdf`
+- JSON object with generation status and GCS URL
+- PDF is uploaded to `gs://keine_panik_bucket/output.pdf`
+
+**Success Response:**
+```json
+{
+  "success": true,
+  "message": "Invoice generated successfully",
+  "invoice_number": "INV-2025-001",
+  "date": "2025-11-26",
+  "total": "$13,562.50",
+  "gcs_url": "https://storage.cloud.google.com/keine_panik_bucket/output.pdf",
+  "items_count": 3
+}
+```
+
+**Error Response:**
+```json
+{
+  "success": false,
+  "error": "Error message",
+  "details": "Detailed error information"
+}
+```
 
 ### JSON Data Structure
 
@@ -80,13 +102,16 @@ All other fields are optional and will be included in the invoice if provided.
 ```bash
 # Basic example with required fields
 curl -G "https://your-service-url.run.app/generate-invoice" \
-  --data-urlencode 'data={"invoice_number":"INV-001","date":"2025-11-26","items":[{"description":"Service","quantity":"1","unit_price":"$100","amount":"$100"}],"total":"$100"}' \
-  --output invoice.pdf
+  --data-urlencode 'data={"invoice_number":"INV-001","date":"2025-11-26","items":[{"description":"Service","quantity":"1","unit_price":"$100","amount":"$100"}],"total":"$100"}'
 
 # Full example with all fields
 curl -G "https://your-service-url.run.app/generate-invoice" \
-  --data-urlencode 'data={"invoice_number":"INV-2025-001","date":"2025-11-26","due_date":"2025-12-26","sender_name":"Your Company","sender_address":"123 Main St","sender_city":"New York, NY 10001","sender_email":"billing@company.com","sender_phone":"+1-555-0100","recipient_name":"Client Corp","recipient_address":"456 Oak Ave","recipient_city":"Boston, MA 02101","recipient_email":"ap@client.com","items":[{"description":"Consulting","quantity":"10","unit_price":"$200","amount":"$2,000"}],"subtotal":"$2,000","tax_rate":"8.5","tax":"$170","total":"$2,170","notes":"Net 30","payment_terms":"Wire transfer preferred"}' \
-  --output invoice.pdf
+  --data-urlencode 'data={"invoice_number":"INV-2025-001","date":"2025-11-26","due_date":"2025-12-26","sender_name":"Your Company","sender_address":"123 Main St","sender_city":"New York, NY 10001","sender_email":"billing@company.com","sender_phone":"+1-555-0100","recipient_name":"Client Corp","recipient_address":"456 Oak Ave","recipient_city":"Boston, MA 02101","recipient_email":"ap@client.com","items":[{"description":"Consulting","quantity":"10","unit_price":"$200","amount":"$2,000"}],"subtotal":"$2,000","tax_rate":"8.5","tax":"$170","total":"$2,170","notes":"Net 30","payment_terms":"Wire transfer preferred"}'
+```
+
+**To access the PDF:** Visit the `gcs_url` returned in the response or go directly to:
+```
+https://storage.cloud.google.com/keine_panik_bucket/output.pdf
 ```
 
 ## Deployment Setup
@@ -184,8 +209,7 @@ The service will be available at `http://localhost:8080`
 
 ```bash
 curl -G "http://localhost:8080/generate-invoice" \
-  --data-urlencode 'data={"invoice_number":"TEST-001","date":"2025-11-26","items":[{"description":"Test Service","quantity":"1","unit_price":"$100","amount":"$100"}],"total":"$100"}' \
-  --output test-invoice.pdf
+  --data-urlencode 'data={"invoice_number":"TEST-001","date":"2025-11-26","items":[{"description":"Test Service","quantity":"1","unit_price":"$100","amount":"$100"}],"total":"$100"}'
 ```
 
 ## Docker Build & Test
@@ -199,8 +223,7 @@ docker run -p 8080:8080 invoice-creator
 
 # Test the containerized service
 curl -G "http://localhost:8080/generate-invoice" \
-  --data-urlencode 'data={"invoice_number":"DOCKER-001","date":"2025-11-26","items":[{"description":"Docker Test","quantity":"1","unit_price":"$50","amount":"$50"}],"total":"$50"}' \
-  --output docker-test-invoice.pdf
+  --data-urlencode 'data={"invoice_number":"DOCKER-001","date":"2025-11-26","items":[{"description":"Docker Test","quantity":"1","unit_price":"$50","amount":"$50"}],"total":"$50"}'
 ```
 
 ## Customizing the Template
